@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block content %}
+{% if perms.catalog.can_view_borrowed %}
+<h1>ALL BORROWED BOOKS</h1>
+    {% for copy in bookinstance_list %}
+
+    {% if copy.status == 'o' %}
+    <li class="{% if copy.is_overdue %}text-danger{% endif %}">
+        <a href="{% url 'book-detail' copy.book.pk %}">{{copy.book.title}}</a> ({{ copy.due_back }})-({{copy.borrower}})
+        {% if perms.catalog.can_view_borrowed %} <a href="{% url 'renew-book-librarian' copy.id %}">Renew</a>  {% endif %}
+      </li>
+    {%endif%}
+    {%endfor%}
+{% endif %}
+{% endblock %}
